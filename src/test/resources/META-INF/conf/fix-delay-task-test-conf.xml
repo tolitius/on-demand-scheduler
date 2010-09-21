@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+
+ 		<task:scheduler id="taskScheduler" pool-size="10"/>
+
+		<bean id="deliveryTask" 
+		      class="org.gitpod.scheduler.task.FixDelayTask">
+		      
+		      <property name="delay" value="1000"/>
+		      <property name="targetObject" ref="mailer"/>
+		      <property name="methodName" value="confirmDelivery"/>		      
+		</bean>
+
+		<bean id="packageDeliveryTask" 
+		      class="org.gitpod.scheduler.task.FixDelayTask">
+		      
+		      <property name="delay" value="1000"/>
+		      <property name="targetObject" ref="mailer"/>
+		      <property name="methodName" value="confirmPackageDelivery"/>
+		      <property name="arguments">
+		      	<util:list>
+		      		<value>Ubuntu DVD</value>
+		      		<value>
+		      		       Apple Computer Inc 
+		      		       1 Infinite Loop
+		      		       Cupertino, CA 95014</value>
+		      	</util:list>
+		      </property>	      
+		</bean>
+
+ 		<bean id="mailer" class="org.gitpod.mailer.Mailer"/>
+ 		
+</beans>
