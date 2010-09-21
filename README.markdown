@@ -39,3 +39,4 @@ That is pretty much it.<br/>
 You would of course have an aspect after / around that certain method that needs attention ( e.g. mailHasArrived() ), and have a regular Spring TaskScheduler injected into the aspect.<br/><br/>
 The main idea here is to have these simple tasks ( FixDelayTask, FixRateTask, CronTask, etc. ) that are suggested by Spring APIs ( e.g. take a look at Spring's ScheduledTaskRegistrar ), inject them in to components that need them as 'Schedulable's, and schedule whenever appropriate.
 
+###### _TODO: Refactor to use FactoryBean(s), JavaDocs, more tests_
