@@ -28,15 +28,20 @@ Which means that the task is going to be scheduled _automatically_ when the appl
 Business requirement: Whenever mail arrives, schedule a mail confirmation task.
 
     <bean id="deliveryTask" 
-          class="org.gitpod.scheduler.task.FixDelayTask">
+          class="org.gitpod.scheduler.task.factory.FixDelayTaskFactoryBean">
         
-        <property name="delay" value="10000"/>
+        <property name="delay" value="1000"/>
         <property name="targetObject" ref="mailer"/>
-        <property name="methodName" value="confirmDelivery"/>        
+        <property name="methodName" value="confirmDelivery"/>
+        <property name="scheduler" ref="taskScheduler"/>
     </bean>
 
-That is pretty much it.<br/>
-You would of course have an aspect after / around that certain method that needs attention ( e.g. mailHasArrived() ), and have a regular Spring TaskScheduler injected into the aspect.<br/><br/>
+That is pretty much it.<br/><br/>
+This will create an immutable task that can be injected anywhere and can be scheduled as:
+
+    deliveryTask.schedule();
+
+To fully satisfy the above business requirement, you would of course have an after / around advice applied to that "certain method" that needs attention ( e.g. mailHasArrived() ), and have this task injected into the aspect.<br/><br/>
 The main idea here is to have these simple tasks ( FixDelayTask, FixRateTask, CronTask, etc. ) that are suggested by Spring APIs ( e.g. take a look at Spring's ScheduledTaskRegistrar ), inject them in to components that need them as 'Schedulable's, and schedule whenever appropriate.
 
-###### _TODO: Refactor to use FactoryBean(s), JavaDocs, more tests_
+###### _TODO: more tasks, more tests, more love_

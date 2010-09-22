@@ -9,19 +9,36 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.support.MethodInvokingRunnable;
 
-public class FixDelayTask implements Schedulable, InitializingBean, DisposableBean {
+/**
+ * <p> {@link org.gitpod.scheduler.Schedulable} task that upon calling its schedule() method invokes {@link Runnable} at
+ *     the specified execution time and subsequently with the given delay between the completion of one execution and
+ *     the start of the next.</p>
+ *
+ * <p> Execution will end once the scheduler shuts down or the returned {@link ScheduledFuture} gets cancelled.</p>
+ *
+ *  @author anatoly.polinsky
+ *
+ **/
+public class FixDelayTask implements Schedulable {
 
-	private Long delay = -1L;
-	private MethodInvokingRunnable task;
-	private Date startTime;
-	
-	private String methodName;
-	private Object targetObject;
-	private Object[] arguments;
+    private Long delay = -1L;
+    private Runnable task;
+    private Date startTime;
+
+    private TaskScheduler scheduler;
 
 	private ScheduledFuture scheduledFuture;
-	
-	public void schedule( TaskScheduler scheduler ) {
+
+    public FixDelayTask ( Runnable task, Long delay, Date startTime, TaskScheduler scheduler ) {
+        this.task = task;
+        this.delay = delay;
+        this.startTime = startTime;
+
+        // TODO: thinking on refactoring the scheduler out of here... or NOT :)      
+        this.scheduler = scheduler;
+    }
+
+	public void schedule() {
 		if ( startTime == null ) {
 			scheduledFuture = scheduler.scheduleWithFixedDelay( task, delay );
 		}
@@ -29,54 +46,22 @@ public class FixDelayTask implements Schedulable, InitializingBean, DisposableBe
 			scheduledFuture = scheduler.scheduleWithFixedDelay( task, startTime, delay );
 		}
 	}
-	
-	public void afterPropertiesSet() throws Exception {
-		
-		if ( delay < 0 ) {
-			throw new IllegalArgumentException( "'delay' must be set and be positive" );
-		}
-		
-		task = new MethodInvokingRunnable();
-		task.setTargetObject( targetObject );
-		task.setTargetMethod( methodName );
-		task.setArguments( arguments );
-		
-		task.afterPropertiesSet();
-	}
-	
-	public void destroy() {
+
+	public void cancel() {
 		if ( scheduledFuture != null ) {
             scheduledFuture.cancel( true );
         }
 	}	
 	
 	// public accessors
-	
+    
 	public Long getDelay() {
 		return delay;
 	}
-
-	public Runnable getTask() {
-		return task;
-	}
-	
-	public void setDelay( Long delay ) {
-		this.delay = delay;
-	}
-
-	public void setMethodName( String methodName ) {
-		this.methodName = methodName;
-	}
-
-	public void setArguments( Object[] arguments ) {
-		this.arguments = arguments;
-	}
-	
-	public void setTargetObject( Object targetObject ) {
-		this.targetObject = targetObject;
-	}
-	
-	public void setStartTime( Date startTime ) {
-		this.startTime = startTime;
-	}
+    public Date getStartTime() {
+        return startTime;
+    }
+    public Runnable getTask() {
+        return task;
+    }
 }

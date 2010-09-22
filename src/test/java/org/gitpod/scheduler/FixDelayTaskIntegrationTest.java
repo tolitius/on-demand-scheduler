@@ -2,8 +2,6 @@ package org.gitpod.scheduler;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -24,17 +22,14 @@ public class FixDelayTaskIntegrationTest {
     @Resource( name="packageDeliveryTask" )
     Schedulable packageDeliveryTask;
 
-    @Resource( name="taskScheduler" )
-    TaskScheduler taskScheduler;
-
     @Test
     public void shouldScheduleDeliveryTask() {
-          deliveryTask.schedule( taskScheduler );
+          deliveryTask.schedule();
     }
             
     @Test
     public void shouldSchedulePackageDeliveryTask() {
-          packageDeliveryTask.schedule( taskScheduler );
+          packageDeliveryTask.schedule();
     }
 
     @Test
