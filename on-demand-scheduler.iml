@@ -36,7 +36,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:3.0.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-test:3.0.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.16" level="project" />
-    <orderEntry type="library" name="Maven: org.junit:com.springsource.org.junit:4.7.0" level="project" />
+    <orderEntry type="library" name="Maven: junit:junit:4.8.1" level="project" />
   </component>
 </module>
 
