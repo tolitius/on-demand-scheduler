@@ -11,20 +11,9 @@
 
  		<task:scheduler id="taskScheduler" pool-size="10"/>
 
-		<bean id="deliveryTask" 
-		      class="org.gitpod.scheduler.task.factory.FixDelayTaskFactoryBean">
-		      
-		      <property name="delay" value="1000"/>
-		      <property name="targetObject" ref="mailer"/>
-		      <property name="targetMethod" value="confirmDelivery"/>
-              <property name="scheduler" ref="taskScheduler"/>
-		</bean>
-
 		<bean id="packageDeliveryTask"
-              class="org.gitpod.scheduler.task.factory.FixDelayTaskFactoryBean">
+              class="org.gitpod.scheduler.task.factory.RunnableTaskFactoryBean">
 
-              <property name="scheduler" ref="taskScheduler"/>
-		      <property name="delay" value="1000"/>
 		      <property name="targetObject" ref="mailer"/>
 		      <property name="targetMethod" value="confirmPackageDelivery"/>
 		      <property name="arguments">

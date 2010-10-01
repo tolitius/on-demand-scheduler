@@ -1,4 +1,4 @@
-package org.gitpod.scheduler;
+package org.gitpod.scheduler.task;
 
 /**
  * <p> Enables schedulable behavior for task execution.</p>
@@ -24,4 +24,11 @@ public interface Schedulable {
      *     later rescheduled using a schedule() method again.</p>
      **/
     public void cancel();
+
+    /**
+     * <p> Each schedulable task should be able to to determine if it is currently scheduled.</p>
+     *
+     * @return whether or not the task is already scheduled
+     **/
+    public boolean isScheduled();
 }

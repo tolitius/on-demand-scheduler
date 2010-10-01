@@ -1,5 +1,8 @@
 package org.gitpod.scheduler;
 
+import org.gitpod.mailer.Mailer;
+import org.gitpod.scheduler.task.Schedulable;
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -13,30 +16,55 @@ import static org.junit.Assert.assertTrue;
 @ContextConfiguration( locations = { "classpath:./META-INF/conf/fix-delay-task-test-conf.xml" } )
 public class FixDelayTaskIntegrationTest {
 
-    public static long mailCount = 0;    
-    public static long packageCount = 0;
-
     @Resource( name="deliveryTask" )
-    Schedulable deliveryTask;
+    private Schedulable deliveryTask;
 
     @Resource( name="packageDeliveryTask" )
-    Schedulable packageDeliveryTask;
+    private Schedulable packageDeliveryTask;
 
+    @Resource( name="mailer" )
+    private Mailer mailer;
+    
     @Test
     public void shouldScheduleDeliveryTask() {
-          deliveryTask.schedule();
+        
+        assertTrue( "task was already scheduled", ! deliveryTask.isScheduled() );
+        deliveryTask.schedule();
+        assertTrue( "task was not scheduled as expected", deliveryTask.isScheduled() );
     }
             
     @Test
     public void shouldSchedulePackageDeliveryTask() {
-          packageDeliveryTask.schedule();
+
+        assertTrue( "task was already scheduled", ! packageDeliveryTask.isScheduled() );
+        packageDeliveryTask.schedule();
+        assertTrue( "task was not scheduled as expected", packageDeliveryTask.isScheduled() );
     }
 
     @Test
     public void shouldGiveTimeForTasksToFireAndThenCheckIfTheyDid() throws Exception {
 
+        assertTrue( "Mailman is too fast today...",
+                    mailer.mailsDelivered() < 4 );
+        assertTrue( "Mail truck is too fast today...",
+                    mailer.packagesDelivered() < 4 );
+
         Thread.sleep( 5225 );
-        assertTrue( "Mailman is pretty slow today... Expected number of mails was not delivered", mailCount > 4 );
-        assertTrue( "Mail truck is pretty slow today... Expected number of packages was not delivered", packageCount > 4 );
+
+        assertTrue( "Mailman is pretty slow today... Expected number of mails was not delivered",
+                    mailer.mailsDelivered() > 4 );
+        assertTrue( "Mail truck is pretty slow today... Expected number of packages was not delivered",
+                    mailer.packagesDelivered() > 4 );
+
+    }
+
+    @Test
+    public void cancelTasksAndCheckIfTheyAreCanceled() {
+        
+        deliveryTask.cancel();
+        packageDeliveryTask.cancel();
+        
+        assertTrue( "task was not cancelled", ! deliveryTask.isScheduled() );
+        assertTrue( "task was not cancelled", ! packageDeliveryTask.isScheduled() );
     }
 }

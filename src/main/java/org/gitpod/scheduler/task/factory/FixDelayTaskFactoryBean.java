@@ -1,11 +1,6 @@
 package org.gitpod.scheduler.task.factory;
 
 import org.gitpod.scheduler.task.FixDelayTask;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.support.MethodInvokingRunnable;
 
 import java.util.Date;
 
@@ -15,38 +10,23 @@ import java.util.Date;
  *  @author anatoly.polinsky
  *  
  **/
-public class FixDelayTaskFactoryBean implements
-        FactoryBean<FixDelayTask>, InitializingBean, DisposableBean {
+public class FixDelayTaskFactoryBean extends AbstractSchedulableTaskFactoryBean {
 
     private FixDelayTask fixDelayTask;
 
     private Long delay = -1L;
     private Date startTime;
 
-    private String methodName;
-    private Object targetObject;
-    private Object[] arguments;
+    @Override
+    public void afterPropertiesSet() throws ClassNotFoundException, NoSuchMethodException, IllegalArgumentException {
 
-    private TaskScheduler scheduler;
-
-    public void afterPropertiesSet() throws Exception {
+        super.afterPropertiesSet();
 
         if ( delay < 0 ) {
             throw new IllegalArgumentException( "'delay' must be set and be positive" );
         }
 
-        if ( scheduler == null ) {
-            throw new IllegalArgumentException( "'scheduler' must be set" );
-        }
-
-        MethodInvokingRunnable task = new MethodInvokingRunnable();
-        task.setTargetObject( targetObject );
-        task.setTargetMethod( methodName );
-        task.setArguments( arguments );
-
-        task.afterPropertiesSet();
-
-        fixDelayTask = new FixDelayTask( task, delay, startTime, scheduler );
+        fixDelayTask = new FixDelayTask( this, delay, startTime, getScheduler() );
     }
 
     public void destroy() throws Exception {
@@ -61,32 +41,13 @@ public class FixDelayTaskFactoryBean implements
         return FixDelayTask.class;
     }
 
-    public boolean isSingleton() {
-        return false;
-    }
 
     // public accessors
     public void setDelay( Long delay ) {
         this.delay = delay;
     }
 
-    public void setMethodName( String methodName ) {
-        this.methodName = methodName;
-    }
-
-    public void setArguments( Object[] arguments ) {
-        this.arguments = arguments;
-    }
-
-    public void setTargetObject( Object targetObject ) {
-        this.targetObject = targetObject;
-    }
-
     public void setStartTime( Date startTime ) {
         this.startTime = startTime;
-    }
-
-    public void setScheduler( TaskScheduler scheduler ) {
-        this.scheduler = scheduler;
     }
 }
