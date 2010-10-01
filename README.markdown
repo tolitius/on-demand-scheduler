@@ -78,8 +78,10 @@ Again, this is a simple Spring bean that can be injected anywhere, and the Sprin
         taskScheduler.schedule( shipOrderTask, trigger );
     }
 
-##### where "org.gitpod.scheduler.task.DurationTrigger" is a custom trigger. You can simply grab it form sources.
-***
-The main idea here is to have these simple tasks: FixDelayTask, TimeOutTask, RunnableTask, FixRateTask, CronTask, etc., some of them are suggested by Spring APIs ( e.g. take a look at Spring's ScheduledTaskRegistrar ), inject them in to components that need them as 'Schedulable's, and schedule whenever appropriate.
+_where a "taskScheduler" is a regular Spring's "<task:scheduler>" and "org.gitpod.scheduler.task.DurationTrigger" is a custom trigger. You can simply grab it form sources._
+
+## The gist of it
+
+The main idea here is to have these simple tasks: FixDelayTask, TimeOutTask, RunnableTask, FixRateTask, CronTask, etc., some of which are suggested by Spring APIs ( e.g. take a look at Spring's ScheduledTaskRegistrar ), inject them in to components that need them as 'Schedulable's, and schedule whenever appropriate.
 
 ###### _TODO: more tasks, more tests, more love_
