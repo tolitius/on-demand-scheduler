@@ -61,7 +61,7 @@ Another example: Start process all the shipments of Ubuntu DVDs to Apple Headqua
         </property>
     </bean>
 
-So this task can be injected anywhere, and the Spring's TaskScheduler APIs can be used. Here is an example from "SchedulingRunnableTaskWithTriggerIntegrationTest":
+Again, this is a simple Spring bean that can be injected anywhere, and the Spring's TaskScheduler APIs can be used. e.g. here is an example from "SchedulingRunnableTaskWithTriggerIntegrationTest":
 
     @Before
     public void shouldCreateTriggerAndScheduleTask() {
@@ -75,10 +75,10 @@ So this task can be injected anywhere, and the Spring's TaskScheduler APIs can b
 
         Trigger trigger = new DurationTrigger( startTime, endTime, period );
 
-        taskScheduler.schedule( packageDeliveryTask, trigger );
+        taskScheduler.schedule( shipOrderTask, trigger );
     }
 
-"org.gitpod.scheduler.task.DurationTrigger" is a custom trigger. You can simply grab it form sources.
+##### where "org.gitpod.scheduler.task.DurationTrigger" is a custom trigger. You can simply grab it form sources.
 ***
 The main idea here is to have these simple tasks: FixDelayTask, TimeOutTask, RunnableTask, FixRateTask, CronTask, etc., some of them are suggested by Spring APIs ( e.g. take a look at Spring's ScheduledTaskRegistrar ), inject them in to components that need them as 'Schedulable's, and schedule whenever appropriate.
 
