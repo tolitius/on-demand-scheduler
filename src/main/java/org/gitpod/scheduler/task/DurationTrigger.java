@@ -6,6 +6,12 @@ import org.springframework.scheduling.TriggerContext;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ *  <p>TODO: add docs</p>
+ *
+ *  @author anatoly.polinsky
+ *
+ **/
 public class DurationTrigger implements Trigger {
 
     private final Date startTime;
