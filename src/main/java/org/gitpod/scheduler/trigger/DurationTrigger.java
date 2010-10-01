@@ -1,9 +1,8 @@
-package org.gitpod.scheduler.task;
+package org.gitpod.scheduler.trigger;
 
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.TriggerContext;
 
-import java.util.Calendar;
 import java.util.Date;
 
 /**

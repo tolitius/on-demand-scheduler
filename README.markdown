@@ -78,7 +78,7 @@ Again, this is a simple Spring bean that can be injected anywhere, and the Sprin
         taskScheduler.schedule( shipOrderTask, trigger );
     }
 
-_where a "taskScheduler" is a regular Spring's "<task:scheduler>" and "org.gitpod.scheduler.task.DurationTrigger" is a custom trigger. You can simply grab it form sources._
+_where a "taskScheduler" is a regular Spring's "<task:scheduler>" and "org.gitpod.scheduler.trigger.DurationTrigger" is a custom trigger. You can simply grab it form sources._
 
 ## The gist of it
 

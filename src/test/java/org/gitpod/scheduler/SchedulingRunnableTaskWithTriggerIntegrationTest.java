@@ -1,7 +1,7 @@
 package org.gitpod.scheduler;
 
 import org.gitpod.mailer.Mailer;
-import org.gitpod.scheduler.task.DurationTrigger;
+import org.gitpod.scheduler.trigger.DurationTrigger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.scheduling.TaskScheduler;
