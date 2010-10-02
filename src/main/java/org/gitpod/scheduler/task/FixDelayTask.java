@@ -45,4 +45,23 @@ public class FixDelayTask extends AbstractSchedulableTask {
     public Date getStartTime() {
         return startTime;
     }
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof FixDelayTask)) {
+			return false;
+		}
+		FixDelayTask other = (FixDelayTask) obj;
+		return this.delay == other.delay
+				&& this.startTime.equals( other.startTime );
+	}
+
+	@Override
+	public int hashCode() {
+		return (int) ( this.delay * 29 ) +
+			   (int) ( 37 * this.startTime.getTime() );
+	}
 }
