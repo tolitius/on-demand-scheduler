@@ -12,8 +12,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.annotation.Resource;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.ScheduledFuture;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith( SpringJUnit4ClassRunner.class )
@@ -41,7 +43,9 @@ public class SchedulingRunnableTaskWithTriggerIntegrationTest {
 
         Trigger trigger = new DurationTrigger( startTime, endTime, period );
 
-        taskScheduler.schedule( packageDeliveryTask, trigger );
+        ScheduledFuture task = taskScheduler.schedule( packageDeliveryTask, trigger );
+
+        assertNotNull( "Expected a task to be scheduled, but it was not", task );
     }
 
     @Test
