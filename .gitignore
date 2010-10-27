@@ -5,3 +5,7 @@
 .project
 .settings
 target/*
+/.project
+/target
+/.classpath
+/.settings
